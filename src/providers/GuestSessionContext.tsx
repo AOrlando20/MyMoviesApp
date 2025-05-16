@@ -12,11 +12,7 @@ const GuestSessionContext = createContext<{
   setGuestSessionId: () => {},
 });
 
-export const GuestSessionProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const GuestSessionProvider = ({ children }: { children: React.ReactNode; }) => {
   const [guestSessionId, setGuestSessionIdState] = useState<string | null>(
     null
   );

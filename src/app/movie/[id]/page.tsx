@@ -255,7 +255,7 @@ const MovieDetailPage = () => {
                     <h3 className={clsx("font-bold text-3xl mb-5", inter.className)}>Peliculas relacionadas</h3>
                     {
                         similarMovies.length !== 0 && (
-                            <MovieList movies={similarMovies.splice(0, 5)} />
+                            <MovieList movies={similarMovies.slice(0, 5)} />
                         )
                     }
                 </div>

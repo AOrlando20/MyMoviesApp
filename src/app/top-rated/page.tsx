@@ -18,6 +18,7 @@ const TopRatedPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [movies, setMovies] = useState<IMovieDetail[]>([]);
   const page = useRef<number>(1);
+  const maxPages = useRef<number>(500);
 
   const searchParams = useSearchParams();
   if (searchParams.has("page")) {
@@ -25,10 +26,10 @@ const TopRatedPage = () => {
 
       if (pages <= 0) {
         page.current = 0;
-      } else if (pages <= 500) {
+      } else if (pages <= maxPages.current) {
         page.current = Number(searchParams.get("page"));
       } else {
-        page.current = 500;
+        page.current = maxPages.current;
       }
   }
 
@@ -61,7 +62,7 @@ const TopRatedPage = () => {
 
       { loading && (<div className="text-md text-gray-700 mb-6">Movies loading...</div>) }
 
-      <PaginationMovies lowerBound={1} upperBound={500} currentValue={page.current} />
+      <PaginationMovies lowerBound={1} upperBound={maxPages.current} currentValue={page.current} />
 
       <MovieList movies={movies} />
     </div>

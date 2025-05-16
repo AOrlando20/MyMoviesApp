@@ -26,7 +26,7 @@ const MovieCard: React.FC<IMovieCard> = ({
                     <Image
                         src={poster}
                         width="360"
-                        height="200"
+                        height="180"
                         className="rounded-t-3xl justify-center grid object-cover"
                         alt={title}
                     />

@@ -17,6 +17,7 @@ const NowPlayingPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [movies, setMovies] = useState<IMovieDetail[]>([]);
   const page = useRef<number>(1);
+  const maxPages = useRef<number>(259);
 
   const searchParams = useSearchParams();
   if (searchParams.has("page")) {
@@ -24,10 +25,10 @@ const NowPlayingPage = () => {
 
       if (pages <= 0) {
         page.current = 0;
-      } else if (pages <= 500) {
+      } else if (pages <= maxPages.current) {
         page.current = Number(searchParams.get("page"));
       } else {
-        page.current = 500;
+        page.current = maxPages.current;
       }
   }
 
@@ -36,6 +37,7 @@ const NowPlayingPage = () => {
       setLoading(true);
       try {
         const data = await getNowPlayingMovies(page.current);
+        maxPages.current = data.total_pages;
         setMovies(data.results);
       } catch (err) {
         console.error("Error loading movies", err);
@@ -60,9 +62,12 @@ const NowPlayingPage = () => {
 
       { loading && (<div className="text-md text-gray-700 mb-6">Movies loading...</div>) }
 
-      <PaginationMovies lowerBound={1} upperBound={500} currentValue={page.current} />
-
-      <MovieList movies={movies} />
+      { !loading && (
+        <>
+          <PaginationMovies lowerBound={1} upperBound={maxPages.current} currentValue={page.current} />
+          <MovieList movies={movies} />
+        </>
+      ) }
     </div>
   )
 }

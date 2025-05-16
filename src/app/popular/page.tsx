@@ -17,6 +17,7 @@ const PopularClientPage = () => {
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState<IMovieDetail[]>([]);
   const page = useRef<number>(1);
+  const maxBound = useRef<number>(500);
   
   const searchParams = useSearchParams();
   if (searchParams.has("page")) {
@@ -24,10 +25,10 @@ const PopularClientPage = () => {
 
       if (pages <= 0) {
         page.current = 0;
-      } else if (pages <= 500) {
+      } else if (pages <= maxBound.current) {
         page.current = Number(searchParams.get("page"));
       } else {
-        page.current = 500;
+        page.current = maxBound.current;
       }
   }
 
@@ -59,7 +60,7 @@ const PopularClientPage = () => {
 
       {loading && <h5 className="text-lg text-gray-500">Cargando...</h5>}
       
-      <PaginationMovies lowerBound={1} upperBound={500} currentValue={page.current} />
+      <PaginationMovies lowerBound={1} upperBound={maxBound.current} currentValue={page.current} />
 
       <div className="overflow-y-scroll">
         <MovieList movies={movies} />
