@@ -1,7 +1,6 @@
 "use client";
 
 import MovieList from "@/components/MovieList/MovieList";
-import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Config from "@/config";
@@ -196,7 +195,7 @@ const MovieDetailPage = () => {
                     }
                     <p><b className="font-semibold">Runtime: </b>{movie.runtime} mins</p>
                     <p><b className="font-semibold">Status: </b>{movie.status}</p>
-                    <p><b className="font-semibold">Release date: </b>{movie.release_date}</p>
+                    <p><b className="font-semibold">Release date: </b>{new Date(movie.release_date).toDateString()}</p>
                     <h4 className={clsx("text-2xl text-black font-semibold", inter.className)}>Languages</h4>
                     <ul>
                         {

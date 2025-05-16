@@ -1,7 +1,7 @@
 'use client';
 // src/app/popular/page.tsx
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { getPopularMovies } from "@/services/movies/getPopularMovies";
 import { IMovieDetail } from "@/types/MovieDetail";
 import MovieList from "@/components/MovieList/MovieList";
@@ -69,4 +69,10 @@ const PopularClientPage = () => {
   );
 };
 
-export default PopularClientPage;
+export default function SuspensePopularPage() {
+  return (
+    <Suspense>
+      <PopularClientPage />
+    </Suspense>
+  )
+};

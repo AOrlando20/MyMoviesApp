@@ -3,7 +3,7 @@
 import MovieList from '@/components/MovieList/MovieList';
 import { getTopRatedMovies } from '@/services/movies/getTopRatedMovies';
 import { IMovieDetail } from '@/types/MovieDetail';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 
 import { Inter } from 'next/font/google';
 import clsx from 'clsx';
@@ -69,4 +69,10 @@ const TopRatedPage = () => {
   )
 }
 
-export default TopRatedPage;
+export default function SuspenseTopRatedPage() {
+    return (
+      <Suspense>
+        <TopRatedPage/>
+      </Suspense>
+    )
+};

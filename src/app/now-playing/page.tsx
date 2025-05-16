@@ -7,7 +7,7 @@ import { IMovieDetail } from '@/types/MovieDetail';
 import clsx from 'clsx';
 import { Inter } from 'next/font/google';
 import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 
 
 const inter = Inter({ weight: ["400", "800"], subsets: ["latin"], preload: true })
@@ -37,6 +37,7 @@ const NowPlayingPage = () => {
       setLoading(true);
       try {
         const data = await getNowPlayingMovies(page.current);
+        
         maxPages.current = data.total_pages;
         setMovies(data.results);
       } catch (err) {
@@ -72,4 +73,10 @@ const NowPlayingPage = () => {
   )
 }
 
-export default NowPlayingPage;
+export default function SuspenseNowPlaying() {
+  return (
+    <Suspense>
+      <NowPlayingPage />
+    </Suspense>
+  )
+};

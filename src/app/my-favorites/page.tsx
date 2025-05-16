@@ -13,7 +13,6 @@ const inter = Inter({ weight: ["400", "600", "700", "800"], subsets: ["latin"], 
 const MyFavoritesPage = () => {
     const { guestSessionId } = useGuestSession();
     const [loading, setLoading] = useState<boolean>(false);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [movies, setMovies] = useState<IMovieDetail[]>([]);
 
     useEffect(() => {
