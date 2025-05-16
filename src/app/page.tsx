@@ -38,15 +38,19 @@ export default function Home() {
     fetchMovies();
   }, [])
 
+  if (loading) return (
+    <div><h3 className="text-xl font-semibold">Cargando...</h3></div>
+  )
+
   return (
     <div>
       <h1 className="text-5xl font-bold mb-5">Home</h1>
       <h3 className="text-3xl font-semibold my-5">Now Playing Movies</h3>
       <MovieList movies={nowPlayingMovies.splice(0, 5)} />
       <h3 className="text-3xl font-semibold my-5">Popular Movies</h3>
-      <MovieList movies={topRatedMovies.splice(0, 5)} />
+      <MovieList movies={popularMovies.splice(0, 5)} />
       <h3 className="text-3xl font-semibold my-5">Top rated Movies</h3>
-      <MovieList movies={nowPlayingMovies.splice(0, 5)} />
+      <MovieList movies={topRatedMovies.splice(0, 5)} />
     </div>
   );
 }
