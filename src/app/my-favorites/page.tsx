@@ -4,7 +4,7 @@ import MovieList from "@/components/MovieList/MovieList";
 import { useGuestSession } from "@/providers/GuestSessionContext";
 import { getFavoriteMovies } from "@/services/accounts/getFavoriteMovies";
 import { IMovieDetail } from "@/types/MovieDetail";
-import clsx from "clsx";
+
 import { Inter } from "next/font/google";
 import { useEffect, useState } from "react";
 
