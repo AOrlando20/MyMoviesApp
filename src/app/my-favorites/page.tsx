@@ -9,7 +9,7 @@ import clsx from "clsx";
 
 import { Inter } from "next/font/google";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const inter = Inter({ weight: ["400", "600", "700", "800"], subsets: ["latin"], preload: true })
 
@@ -76,6 +76,12 @@ const MyFavoritesPage = () => {
     </div>)
 }
 
-export default MyFavoritesPage;
+export default function SuspenseMyFavoritesPage() {
+    return (
+        <Suspense>
+            <MyFavoritesPage />
+        </Suspense>
+    )
+};
 
 // rafce
