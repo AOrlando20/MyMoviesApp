@@ -14,7 +14,7 @@ export default function RootLayout({
       >
         <GuestSessionProvider>
           <Header/>
-          <main className="p-6 mt-16">{children}</main>
+          <main>{children}</main>
         </GuestSessionProvider>
       </body>
     </html>

@@ -35,15 +35,15 @@ const PaginationMovies = ({
                 <PaginationItem>
                     <PaginationPrevious href={`?page=${previousPage}`} aria-disabled={currentValue <= lowerBound}></PaginationPrevious>
                 </PaginationItem>
-                <PaginationItem>
+                { firstValue >= lowerBound && <PaginationItem>
                     <PaginationLink href={`?page=${firstValue}`} isActive={currentValue == lowerBound}>{firstValue}</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
+                </PaginationItem>}
+                { secondValue >= lowerBound && <PaginationItem>
                     <PaginationLink href={`?page=${secondValue}`} isActive={currentValue > lowerBound && currentValue < upperBound - 1}>{secondValue}</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
+                </PaginationItem>}
+                { thirdValue >= lowerBound && <PaginationItem>
                     <PaginationLink href={`?page=${thirdValue}`} isActive={currentValue == upperBound - 1}>{thirdValue}</PaginationLink>
-                </PaginationItem>
+                </PaginationItem>}
                 <PaginationItem>
                     <PaginationLink href={`?page=${fourthValue}`} isActive={currentValue == upperBound}>{fourthValue}</PaginationLink>
                 </PaginationItem>

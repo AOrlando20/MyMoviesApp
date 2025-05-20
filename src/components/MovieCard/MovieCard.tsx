@@ -21,11 +21,11 @@ const MovieCard: React.FC<IMovieCard> = ({
     return (
         <div className="flex items-center justify-center">
             <div className="mx-auto bg-white rounded-3xl shadow-xl">
-                <div className="grid rounded-3xl max-w-[360px] shadow-sm bg-slate-100 flex-col group">
+                <div className="grid rounded-3xl max-w-[280px] shadow-sm bg-slate-100 flex-col group">
                     {/* Poster Image */}
                     <Image
                         src={poster}
-                        width="360"
+                        width="280"
                         height="180"
                         className="rounded-t-3xl justify-center grid object-cover"
                         alt={title}

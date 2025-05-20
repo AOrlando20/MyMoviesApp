@@ -1,6 +1,6 @@
 "use client";
 
-import MovieList from "@/components/MovieList/MovieList";
+import MovieScroll from "@/components/MovieScroll/MovieScroll";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Config from "@/config";
@@ -8,9 +8,10 @@ import { useGuestSession } from "@/providers/GuestSessionContext";
 import { markAsFavorite } from "@/services/accounts/markAsFavorite";
 import { getMovieById } from "@/services/movies/getMovieById";
 import { getMovieImagesById } from "@/services/movies/getMovieImagesById";
-import { getSimilarMoviesById } from "@/services/movies/getSimilarMovies";
+import { getRecommendedMoviesById } from "@/services/movies/getRecommendedMoviesById";
 import { IMovieBackdropDetail } from "@/types/MovieBackdropDetail";
 import { IMovieDetail } from "@/types/MovieDetail";
+import { IMovieRecommendation } from "@/types/MovieRecommendation";
 import clsx from "clsx";
 import { Heart } from "lucide-react";
 import { Inter } from "next/font/google";
@@ -69,7 +70,7 @@ const MovieDetailPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [favorite, setFavorite] = useState<boolean>(false); 
 
-    const [similarMovies, setSimilarMovies] = useState<IMovieDetail[]>([]);
+    const [movieRecommendations, setMovieRecommendations] = useState<IMovieRecommendation[]>([]);
 
     const { guestSessionId } = useGuestSession();
 
@@ -81,10 +82,16 @@ const MovieDetailPage = () => {
             try {
                 const movie_data = await getMovieById(id);
                 const img_data = await getMovieImagesById(id);
-                const similar_movie_data = await getSimilarMoviesById(id);
+                const recommended_movie_data = await getRecommendedMoviesById(id);
+
                 setMovie(movie_data);
                 setMovieImages(img_data.backdrops[0]);
-                setSimilarMovies(similar_movie_data.results);
+                setMovieRecommendations(recommended_movie_data.results);
+
+                const storedFavorites = localStorage.getItem("favoriteMovieIds");
+                const favoriteIds: number[] = storedFavorites ? JSON.parse(storedFavorites) : [];
+
+                setFavorite(favoriteIds.includes(Number(id)));
 
                 if (localStorage.getItem(String(movie_data.id))) {
                     setFavorite(true);
@@ -99,16 +106,6 @@ const MovieDetailPage = () => {
 
         fetchMovie();
     }, [id]);
-
-
-    useEffect(() => {
-        if (!id || typeof id !== "string") return;
-
-        const storedFavorites = localStorage.getItem("favoriteMovieIds");
-        const favoriteIds: number[] = storedFavorites ? JSON.parse(storedFavorites) : [];
-
-        setFavorite(favoriteIds.includes(Number(id)));
-    }, [id]);   
 
 
     const onClickFavorite = async () => {
@@ -143,28 +140,31 @@ const MovieDetailPage = () => {
     const budgetString = movie.budget.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
     return (
-        <div>
+        <div className="p-4 pb-0">
             {/* TODO: Add more movie details here. */}
 
             <div id="movie-backdrop" 
-                 className="grid bg-black relative w-full h-110 p-8 pt-0 items-end mb-8 shadow-lg rounded-2xl">
-                <Image
+                 style={{ 
+                    backgroundImage: `linear-gradient(to right, rgba(0,0,0, 1.0), rgba(0,0,0,0.6), rgba(0,0,0,1.0)),
+                    url("${posterPath}")`, backgroundSize: "contain", backgroundPositionX: "center" }}
+                 className="grid bg-black bg-no-repeat relative w-full h-110 p-8 pt-0 items-end mb-8 shadow-lg rounded-2xl">
+                {/*<Image
                     src={posterPath}
                     alt={""}
                     fill
                     objectFit="contain"
                     className="w-full z-0 opacity-20"
-                />
+                />*/}
                 <div className="flex flex-row flex-wrap items-end">
                     <div className="z-10">
                         <div className="flex flex-row items-center gap-4">
                             <h1 className="text-5xl text-white inline font-bold">{movie.title}</h1>
-                            <p className="text-2xl text-gray-600 pt-2">({new Date(movie.release_date).getFullYear()})</p>
+                            <p className="text-2xl text-gray-400 pt-2">({new Date(movie.release_date).getFullYear()})</p>
                         </div>
                         <p className="text-lg text-gray-500 text-wrap mt-2">{movie.tagline}</p>
                     </div>
                     <div className="grow"></div>
-                    <div className="flex flex-row text-white items-center text-xl gap-2 z-10">
+                    <div className="flex flex-row text-white items-center text-xl gap-2 pt-4 z-10">
                         <StarSVG />
                         <span className="mr-4">
                             {movie.vote_average.toFixed(1)}/10
@@ -184,7 +184,7 @@ const MovieDetailPage = () => {
                 </div>
             </div>
             <div id="movie-details"
-                 className="grid grid-cols-2 gap-10 p-8">
+                 className="grid grid-cols-2 gap-10">
                 <div className="flex flex-col gap-4 border-2 p-6 rounded-2xl">
                     <h3 className={clsx("text-4xl text-black font-bold", inter.className)}>Overview</h3>
                     <p className="text-gray-700">{movie.overview}</p>
@@ -195,7 +195,7 @@ const MovieDetailPage = () => {
                     }
                     <p><b className="font-semibold">Runtime: </b>{movie.runtime} mins</p>
                     <p><b className="font-semibold">Status: </b>{movie.status}</p>
-                    <p><b className="font-semibold">Release date: </b>{new Date(movie.release_date).toDateString()}</p>
+                    <p><b className="font-semibold">Release date: </b>{new Date(movie.release_date).toLocaleDateString()}</p>
                     <h4 className={clsx("text-2xl text-black font-semibold", inter.className)}>Languages</h4>
                     <ul>
                         {
@@ -251,12 +251,7 @@ const MovieDetailPage = () => {
                     }
                 </div>
                 <div className="col-span-2 p-6 border-2 rounded-2xl">
-                    <h3 className={clsx("font-bold text-3xl mb-5", inter.className)}>Peliculas relacionadas</h3>
-                    {
-                        similarMovies.length !== 0 && (
-                            <MovieList movies={similarMovies.slice(0, 5)} />
-                        )
-                    }
+                    <MovieScroll title={"Peliculas recomendadas"} category="" movies={movieRecommendations} />
                 </div>
             </div>
      </div>

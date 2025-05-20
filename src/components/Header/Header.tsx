@@ -12,26 +12,28 @@ const links = [
     { href: '/my-favorites', label: 'My Favorites' }
 ]
 
+const nombreSitio = "PeliculasHD"
+
 
 const Header = () => {
     const pathname = usePathname();
 
     return (
-        <header className="w-full border-b shadow-sm">
-            <div className="container mx-auto flex items-center justify-between px-4 py-3">
-                <Link href={"/"} className="text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
-                    PelisXD
+        <header className="w-full border-b shadow-sm bg-gradient-to-r from-indigo-800 to-indigo-950">
+            <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between px-8 py-3">
+                <Link href={"/"} className="text-xl font-bold text-white hover:text-indigo-300 transition-colors">
+                    {nombreSitio}
                 </Link>
 
-                <nav className="flex gap-6">
+                <nav className="flex flex-col sm:flex-row p-3 xs:p-0 gap-6">
                     { links.map(({ href, label }) => {
                         return (
                             <Link 
-                                key={href} 
-                                href={href} 
+                                key={href}
+                                href={href}
                                 className={clsx(
-                                "text-sm font-medium transition-colors hover:text-blue-600",
-                                pathname === href ? "text-blue-600 underline" : "text-gray-600"
+                                "text-sm font-medium transition-colors hover:text-indigo-300",
+                                pathname === href ? "text-indigo-300 underline" : "text-white"
                             )}>
                                 {label}
                             </Link>
